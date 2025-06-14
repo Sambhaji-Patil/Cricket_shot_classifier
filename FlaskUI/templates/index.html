@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cricket Shot Classifier</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    .header img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 15px;
+    }
+    h1 {
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0;
+    }
+    form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    input[type="file"] {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-left: 10px;
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 90%;
+      max-width: 900px;
+      background: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    .card img {
+      width: 250px;
+      object-fit: cover;
+      height: 250px;
+    }
+    .card-content {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .prob-list {
+      margin-top: 10px;
+    }
+    .prob-list span {
+      display: block;
+      font-size: 0.95em;
+      margin-bottom: 4px;
+    }
+    .label {
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #2c3e50;
+    }
+    #loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #loading img {
+      width: 80px;
+    }
+  </style>
+  <script>
+    function showLoading() {
+      document.getElementById("loading").style.display = "block";
+    }
+  </script>
+</head>
+<body>
+
+  <div class="header">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+    <h1>Cricket Shot Classifier</h1>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+    <input type="file" name="images" multiple accept="image/*">
+    <button type="submit">Predict</button>
+  </form>
+
+  <div id="loading">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+    <p>Analyzing shots, please wait...</p>
+  </div>
+
+  <div class="card-container">
+    {% for result in results %}
+    <div class="card">
+      <img src="{{ result.filepath }}" alt="Input Image">
+      <img src="{{ result.gradcam }}" alt="GradCAM">
+      <div class="card-content">
+        <div class="label">Predicted: {{ result.predicted | join(', ') }}</div>
+        <div class="prob-list">
+          {% for label, prob in result.probabilities.items() %}
+          <span>{{ label }}: {{ prob }}%</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
