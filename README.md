@@ -1,4 +1,4 @@
-# 🏏 Cricket Shot Classifier Web App
+# Cricket Shot Classifier Web App
 
 ![App Screenshot](header.png)
 
