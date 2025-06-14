@@ -55,7 +55,7 @@ A deep learning-powered web application to classify cricket batting shots from i
 
 ```bash
 git clone https://github.com/Sambhaji-Patil/Cricket_shot_classifier.git
-cd cricket-shot-classifier
+cd Cricket_shot_classifier
 pip install -r requirements.txt
 ````
 
